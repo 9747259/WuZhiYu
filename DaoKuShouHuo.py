@@ -171,10 +171,11 @@ def confirm():
                             arr3 = []
                             final_temp_number = 0
                             break
+        print("当前的行号是:%d"%final_sheet_row)
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                  '1]/div/div/div/div/div[1]/div/div[1]/div/button[1]') .click()
     sleep(2)
-    driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div/div/div[2]/button[2]').click()
+    driver.find_element_by_xpath('/html/body/div[5]/div/div[2]/div/div[2]/div/div/div[2]/button[2]').click()
     sleep(2)
     driver.find_element_by_xpath('/html/body/div[3]/div/div[2]/div/div[2]/div[3]/button[2]').click()
     mybook.save(r'D:\工作相关\到库收货.xlsx')
@@ -191,7 +192,7 @@ if __name__ == "__main__":
     mybook = openpyxl.load_workbook(r'D:\工作相关\到库收货.xlsx')
     mysheet = mybook.active
     max_row = mysheet.max_row
-    startrow = input('请输入表格开始行号：')
+    startrow = int(input('请输入表格开始行号：'))
 
     for row in range(startrow, max_row):
         if mysheet.cell(row + 1, 2).value == mysheet.cell(row, 2).value:
