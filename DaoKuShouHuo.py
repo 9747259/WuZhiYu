@@ -191,7 +191,9 @@ if __name__ == "__main__":
     mybook = openpyxl.load_workbook(r'D:\工作相关\到库收货.xlsx')
     mysheet = mybook.active
     max_row = mysheet.max_row
-    for row in range(2, max_row):
+    startrow = input('请输入表格开始行号：')
+
+    for row in range(startrow, max_row):
         if mysheet.cell(row + 1, 2).value == mysheet.cell(row, 2).value:
             if arr == []:
                 arr = [row, row+1]
