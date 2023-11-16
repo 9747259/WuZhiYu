@@ -142,7 +142,6 @@ def confirm():
                                                          '2]/table/tbody/tr[%d]/td['
                                                          '1]/div/span/span' % final_system_row).click()
                             mysheet.cell(final_sheet_row, 9).value = '物资域已收到货'
-                            mysheet.cell(final_sheet_row, 7).fill = orange_fill
                             break
                 else:
                     if flag_y == 0:
@@ -168,10 +167,18 @@ def confirm():
                                                          '2]/table/tbody/tr[%d]/td['
                                                          '1]/div/span/span'%final_system_row).click()
 
-
+                            mysheet.cell(final_sheet_row, 9).value = '物资域已收到货'
                             arr3 = []
                             final_temp_number = 0
                             break
+    driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
+                                 '1]/div/div/div/div/div[1]/div/div[1]/div/button[1]') .click()
+    sleep(2)
+    driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div/div/div[2]/button[2]').click()
+    sleep(2)
+    driver.find_element_by_xpath('/html/body/div[3]/div/div[2]/div/div[2]/div[3]/button[2]').click()
+    mybook.save(r'D:\工作相关\到库收货.xlsx')
+
 
 if __name__ == "__main__":
     arr = []
