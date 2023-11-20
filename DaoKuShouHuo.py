@@ -1,6 +1,7 @@
 from time import sleep
 
 from selenium import webdriver
+from selenium.webdriver.remote import switch_to
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -32,14 +33,13 @@ def table_head(row):
 
 
 def order_deal():
-    global arr, temp_number, b
-    arr2 = []
+    global arr, arr2, temp_number, b
+
     temp_number = 0
     sleep(1)
     length = len(driver.find_elements_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
                                       '2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr'))
     # 检查该订单是否有物料可以收料
-    print('length=%d'%length)
     if length == 0:
         '''点击订单取消按钮'''
         driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
@@ -80,7 +80,7 @@ def order_deal():
                     else:
                         for x in arr2:
                             temp_number = mysheet.cell(x, 7).value + temp_number
-                            temp_number = x
+
                         if mysheet.cell(sheet_row, 3).value == driver.find_element_by_xpath(
                                 '/html/body/div/section/section/section/main/div/div[1]/div[2]/div/div/div/div/div[3]/div['
                                 '2]/div[1]/div[2]/table/tbody/tr[%d]/td[3]/div'%system_row).text:
@@ -108,13 +108,13 @@ def confirm():
     global arr
     arr3 = []
     final_temp_number = 0
+    flag_confirm = 0
     orange_fill = PatternFill(fill_type='solid', fgColor="FFC125")
 
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
                                  '2]/div/div/div/div/div[1]/div/div[1]/div/button[1]').click()
     length2 = len(driver.find_elements_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                                 '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr'))
-    print('length2=%d'%length2)
     sleep(1)
     for final_sheet_row in arr:
         flag_y = 0
@@ -136,7 +136,30 @@ def confirm():
                                 '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                 '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
                                 '10]/div/span/div/div/div[2]/input' % final_system_row)
-                            ActionChains(driver).double_click(path_action).send_keys(mysheet.cell(final_sheet_row, 7).value).perform()
+
+
+                            if driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                         '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                         '2]/table/tbody/tr/td[13]/div/span').text == '上架':
+                                driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                             '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                             '2]/table/tbody/tr/td[13]/div/span').click()
+                                sleep(2)
+                                driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[2]/div/div['
+                                                             '3]/div[1]/div/div/div/div/div/div/div/div['
+                                                             '2]/table/tbody/tr[1]/td[1]/span/label/span/input').click()
+                                sleep(1)
+                                driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[3]/div/button[2]').click()
+                                sleep(2)
+                                driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                             '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                             '2]/table/tbody/tr[%d]/td['
+                                                             '1]/div/span/span' % final_system_row).click()
+                                flag_confirm = 1
+                                sleep(2)
+
+                            ActionChains(driver).double_click(path_action).send_keys(
+                                str(mysheet.cell(final_sheet_row, 7).value)).perform()
                             driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                          '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                          '2]/table/tbody/tr[%d]/td['
@@ -161,7 +184,28 @@ def confirm():
                                 '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                 '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
                                 '10]/div/span/div/div/div[2]/input' % final_system_row)
-                            ActionChains(driver).double_click(path_action).send_keys(final_temp_number).perform()
+
+                            if driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                         '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                         '2]/table/tbody/tr/td[13]/div/span').text == '上架':
+                                driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                             '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                             '2]/table/tbody/tr/td[13]/div/span').click()
+                                sleep(2)
+                                driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[2]/div/div['
+                                                             '3]/div[1]/div/div/div/div/div/div/div/div['
+                                                             '2]/table/tbody/tr[1]/td[1]/span/label/span/input').click()
+                                sleep(1)
+                                driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[3]/div/button[2]').click()
+                                sleep(2)
+                                driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                             '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                             '2]/table/tbody/tr[%d]/td['
+                                                             '1]/div/span/span' % final_system_row).click()
+                                flag_confirm = 1
+                                sleep(2)
+
+                            ActionChains(driver).double_click(path_action).send_keys(str(final_temp_number)).perform()
                             driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                          '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                          '2]/table/tbody/tr[%d]/td['
@@ -171,22 +215,55 @@ def confirm():
                             arr3 = []
                             final_temp_number = 0
                             break
-        print("当前的行号是:%d"%final_sheet_row)
+
 
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                  '1]/div/div/div/div/div[1]/div/div[1]/div/button[1]') .click()
     sleep(2)
-    driver.find_element_by_xpath('/html/body/div[5]/div/div[2]/div/div[2]/div/div/div[2]/button[2]').click()
-    sleep(2)
-    driver.find_element_by_xpath('/html/body/div[3]/div/div[2]/div/div[2]/div[3]/button[2]').click()
+    '''
+    ele = WebDriverWait(driver,10,0.5).until(EC.element_to_be_clickable((By.CSS_SELECTOR,'body > div:nth-child(10) > div > '
+                                        'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
+                                        'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
+                                        'button.ant-btn.ant-btn-primary')))
+    ele.click()
+    '''
+    if flag_confirm == 0:
+        driver.find_element_by_css_selector('body > div:nth-child(10) > div > '
+                                        'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
+                                        'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
+                                        'button.ant-btn.ant-btn-primary').click()
+        sleep(2)
+        driver.find_element_by_css_selector(
+            'body > div:nth-child(9) > div > div.ant-modal-wrap.ant-modal-centered > div '
+            '> div.ant-modal-content > div.ant-modal-footer > button:nth-child(1)').click()
+    if flag_confirm == 1:
+        driver.find_element_by_css_selector('body > div:nth-child(11) > div > '
+                                            'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
+                                            'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
+                                            'button.ant-btn.ant-btn-primary').click()
+        sleep(2)
+        driver.find_element_by_css_selector(
+            'body > div:nth-child(10) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
+            'div.ant-modal-footer > button:nth-child(2)').click()
+        flag_confirm = 0
+
+
+
     mybook.save(r'D:\工作相关\到库收货.xlsx')
+    driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
+                                 '1]/div/div/div/div/div[1]/div/div[1]/div/button[3]') .click()
+    driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div[1]/div/div/div/div['
+                                 '1]/div/div[6]/div/div[2]/div/div/div/div/ul/li/div/span[1]/span/span['
+                                 '1]/span').click()
+    driver.find_element_by_xpath(
+        '/html/body/div/section/section/section/main/div/div[1]/div[1]/div/div/div/div[2]/div/div/span').click()
 
 
 if __name__ == "__main__":
     arr = []
+    arr2 = []
     temp_number = 0
     b = 0
-
     el_frame = driver.find_element_by_xpath("/html/body/form/div[3]/div[3]/div[2]/div[6]/div/iframe")
     driver.switch_to.frame(el_frame)  # 非常重要的一步，跳转到内部的iframe
 
@@ -221,4 +298,4 @@ if __name__ == "__main__":
                     confirm()
                     b = 0
                 arr = []
-
+        print("当前的行号是:%d" % row)
