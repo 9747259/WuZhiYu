@@ -244,10 +244,8 @@ def confirm():
         sleep(2)
         driver.find_element_by_css_selector(
             'body > div:nth-child(10) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
-            'div.ant-modal-footer > button:nth-child(2)').click()
+            'div.ant-modal-footer > button:nth-child(1)').click()
         flag_confirm = 0
-
-
 
     mybook.save(r'D:\工作相关\到库收货.xlsx')
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
@@ -299,3 +297,4 @@ if __name__ == "__main__":
                     b = 0
                 arr = []
         print("当前的行号是:%d" % row)
+    print("已完成")
