@@ -33,7 +33,6 @@ def order_deal():
     length = len(driver.find_elements_by_xpath('/html/body/div[1]/section/section/section/main/div/div/div/div['
                                                '3]/div[1]/div[2]/div[1]/div[2]/div/div/div/div/div[3]/div[2]/div['
                                                '1]/div[2]/table/tbody/tr'))
-    print('length=%d' % length)
     if length == 0:
         '''点击订单取消按钮'''
         driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div/div/div[3]/div[1]/div['
@@ -64,9 +63,9 @@ def order_deal():
                                                      '2]/div[1]/div[2]/table/tbody/tr[%d]/td[1]/div/span/span' %
                                                      system_row).click()
                         mysheet.cell(sheet_row, 9).value = '已过账'
-                        mysheet.cell(sheet_row, 7).fill = orange_fill
+                        #mysheet.cell(sheet_row, 7).fill = orange_fill
                         flag_order_deal = 1
-                        print('当前表行号是：%d'%sheet_row)
+
                         break
 
         if flag_order_deal == 1:
@@ -114,3 +113,5 @@ if __name__ == "__main__":
                 sleep(1)  # 非常重要，等网页读取数据完成，不然影响到后面数据选择
                 order_deal()
                 arr = []
+
+        print('当前表行号是：%d' % (row+1))
