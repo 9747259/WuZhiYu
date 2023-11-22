@@ -220,13 +220,8 @@ def confirm():
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                  '1]/div/div/div/div/div[1]/div/div[1]/div/button[1]') .click()
     sleep(2)
-    '''
-    ele = WebDriverWait(driver,10,0.5).until(EC.element_to_be_clickable((By.CSS_SELECTOR,'body > div:nth-child(10) > div > '
-                                        'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
-                                        'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
-                                        'button.ant-btn.ant-btn-primary')))
-    ele.click()
-    '''
+
+    '''当有库存地录入时，确认弹出框的点击按钮不一致，要分别执行，flag_confirm为0时表示没有库存地录入，flag_confirm为1时表示有库存地录入'''
     if flag_confirm == 0:
         driver.find_element_by_css_selector('body > div:nth-child(10) > div > '
                                         'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
@@ -246,7 +241,7 @@ def confirm():
             'body > div:nth-child(10) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
             'div.ant-modal-footer > button:nth-child(1)').click()
         flag_confirm = 0
-
+    '''保存EXCEL表的数据'''
     mybook.save(r'D:\工作相关\到库收货.xlsx')
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                  '1]/div/div/div/div/div[1]/div/div[1]/div/button[3]') .click()
@@ -270,6 +265,7 @@ if __name__ == "__main__":
     max_row = mysheet.max_row
     startrow = int(input('请输入表格开始行号：'))
 
+    '''循环EXCEL表的每一行'''
     for row in range(startrow, max_row):
         if mysheet.cell(row + 1, 2).value == mysheet.cell(row, 2).value:
             if arr == []:
@@ -280,10 +276,13 @@ if __name__ == "__main__":
             if arr == []:
                 arr.append(row)
                 sleep(2)  #非常重要，等网页读取数据完成，不然影响到后面数据选择
+                '''网页的表头录入程序'''
                 table_head(row)
+                '''网页的物料选择程序'''
                 order_deal()
                 sleep(2)
                 if b == 1:
+                    '''网页的物料数量录入程序，如果没有可以录入的，就不执行'''
                     confirm()
                     b = 0
                 arr = []
@@ -296,5 +295,5 @@ if __name__ == "__main__":
                     confirm()
                     b = 0
                 arr = []
-        print("当前的行号是:%d" % row)
+        print("当前的行号是:%d" % (row+1))
     print("已完成")
