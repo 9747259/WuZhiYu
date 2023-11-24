@@ -112,5 +112,5 @@ if __name__ == "__main__":
                 order_deal()
                 arr = []
 
-        print('需收料表总共%d行,当前行号是：%d,还剩%d行未完成。' % (max_row,row+1,max_row-row+1))
+        print('需收料表总共%d行,当前行号是：%d,还剩%d行未完成。' % (max_row,row+1,(max_row-row+1)))
     print("已完成！！！")
