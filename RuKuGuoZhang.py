@@ -93,8 +93,6 @@ if __name__ == "__main__":
     mysheet = mybook.active
     max_row = mysheet.max_row
 
-
-
     for row in range(sheet_start_number, max_row):
         if mysheet.cell(row + 1, 2).value == mysheet.cell(row, 2).value:
             if arr == []:
@@ -114,4 +112,5 @@ if __name__ == "__main__":
                 order_deal()
                 arr = []
 
-        print('当前表行号是：%d' % (row+1))
+        print('需收料表总共%d行,当前行号是：%d,还剩%d行未完成。' % (max_row,row+1,max_row-row+1))
+    print("已完成！！！")
