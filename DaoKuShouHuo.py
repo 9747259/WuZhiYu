@@ -157,13 +157,19 @@ def confirm():
                                                              '1]/div/span/span' % final_system_row).click()
                                 flag_confirm = 1
                                 sleep(2)
-
+                            '''点击下拉菜单，并选择库位'''
+                            driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr/td[14]/div/div/div/span').click()
+                            sleep(2)
+                            location_number = select_location(mysheet.cell(final_sheet_row, 1).value)
+                            driver.find_element_by_xpath('/html/body/div[4]/div/div/div/ul/li[%d]'%location_number).click()
+                            '''输入数量'''
                             ActionChains(driver).double_click(path_action).send_keys(
                                 str(mysheet.cell(final_sheet_row, 7).value)).perform()
                             driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                          '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                          '2]/table/tbody/tr[%d]/td['
                                                          '1]/div/span/span' % final_system_row).click()
+                            '''保存EXCEL表数据'''
                             mysheet.cell(final_sheet_row, 9).value = '物资域已收到货'
                             break
                 else:
@@ -204,13 +210,20 @@ def confirm():
                                                              '1]/div/span/span' % final_system_row).click()
                                 flag_confirm = 1
                                 sleep(2)
-
+                            '''点击下拉菜单，并选择库位'''
+                            driver.find_element_by_xpath(
+                                '/html/body/div[1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr/td[14]/div/div/div/span').click()
+                            sleep(2)
+                            location_number = select_location(mysheet.cell(final_sheet_row, 1).value)
+                            driver.find_element_by_xpath(
+                                '/html/body/div[4]/div/div/div/ul/li[%d]' % location_number).click()
+                            '''输入数量'''
                             ActionChains(driver).double_click(path_action).send_keys(str(final_temp_number)).perform()
                             driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                          '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                          '2]/table/tbody/tr[%d]/td['
                                                          '1]/div/span/span'%final_system_row).click()
-
+                            '''保存EXCEL表数据'''
                             mysheet.cell(final_sheet_row, 9).value = '物资域已收到货'
                             arr3 = []
                             final_temp_number = 0
@@ -222,6 +235,7 @@ def confirm():
     sleep(2)
 
     '''当有库存地录入时，确认弹出框的点击按钮不一致，要分别执行，flag_confirm为0时表示没有库存地录入，flag_confirm为1时表示有库存地录入'''
+    '''
     if flag_confirm == 0:
         driver.find_element_by_css_selector('body > div:nth-child(10) > div > '
                                         'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
@@ -231,16 +245,17 @@ def confirm():
         driver.find_element_by_css_selector(
             'body > div:nth-child(9) > div > div.ant-modal-wrap.ant-modal-centered > div '
             '> div.ant-modal-content > div.ant-modal-footer > button:nth-child(1)').click()
-    if flag_confirm == 1:
-        driver.find_element_by_css_selector('body > div:nth-child(11) > div > '
-                                            'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
-                                            'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
-                                            'button.ant-btn.ant-btn-primary').click()
-        sleep(2)
-        driver.find_element_by_css_selector(
-            'body > div:nth-child(10) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
-            'div.ant-modal-footer > button:nth-child(1)').click()
-        flag_confirm = 0
+    '''
+    #if flag_confirm == 1:
+    driver.find_element_by_css_selector('body > div:nth-child(11) > div > '
+                                        'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
+                                        'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
+                                        'button.ant-btn.ant-btn-primary').click()
+    sleep(2)
+    driver.find_element_by_css_selector(
+        'body > div:nth-child(9) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
+        'div.ant-modal-footer > button:nth-child(1)').click()
+        #flag_confirm = 0
     '''保存EXCEL表的数据'''
     mybook.save(r'D:\工作相关\到库收货.xlsx')
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
@@ -251,6 +266,23 @@ def confirm():
     driver.find_element_by_xpath(
         '/html/body/div/section/section/section/main/div/div[1]/div[1]/div/div/div/div[2]/div/div/span').click()
 
+def select_location(temp_location):
+    if temp_location == '0001':
+        return 1
+    elif temp_location == '0005':
+        return 5
+    elif temp_location == '0004':
+        return 4
+    elif temp_location == '2006':
+        return 52
+    elif temp_location == '2007':
+        return 53
+    elif temp_location == '2008':
+        return 54
+    elif temp_location == '4002':
+        return 70
+    else:
+        return 3
 
 if __name__ == "__main__":
     arr = []
@@ -295,5 +327,5 @@ if __name__ == "__main__":
                     confirm()
                     b = 0
                 arr = []
-        print("当前的行号是:%d" % (row+1))
+        print("总行号是：%d,当前的行号是:%d,还剩%d条未完成" % (max_row, row+1, (max_row-row+1)))
     print("已完成")
