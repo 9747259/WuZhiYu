@@ -42,12 +42,7 @@ def order_deal():
     # 检查该订单是否有物料可以收料
     if length == 0:
         '''点击订单取消按钮'''
-        driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
-                                     '1]/div/div/div/div[1]/div/div[6]/div/div[2]/div/div/div/div/ul/li/div/span['
-                                     '1]/span/span[1]/span').click()
-        sleep(2)
-        driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
-                                     '1]/div/div/div/div[2]/div/div/span/i') .click()
+        cancel_button()
         b = 0
     else:
         for sheet_row in arr:
@@ -102,7 +97,9 @@ def order_deal():
                                 break
                         arr2 = []
                         temp_number = 0
-
+        ''''''
+        if b == 0:
+            cancel_button()
 
 def confirm():
     global arr
@@ -284,10 +281,21 @@ def select_location(temp_location):
     else:
         return 3
 
+
+def cancel_button():
+    driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
+                                 '1]/div/div/div/div[1]/div/div[6]/div/div[2]/div/div/div/div/ul/li/div/span['
+                                 '1]/span/span[1]/span').click()
+    sleep(2)
+    driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
+                                 '1]/div/div/div/div[2]/div/div/span/i').click()
+
+
 if __name__ == "__main__":
     arr = []
     arr2 = []
     temp_number = 0
+    confirm_ok = 1
     b = 0
     el_frame = driver.find_element_by_xpath("/html/body/form/div[3]/div[3]/div[2]/div[6]/div/iframe")
     driver.switch_to.frame(el_frame)  # 非常重要的一步，跳转到内部的iframe
@@ -312,6 +320,9 @@ if __name__ == "__main__":
                 table_head(row)
                 '''网页的物料选择程序'''
                 order_deal()
+                if confirm_ok == 0:
+                    confirm_ok = 1
+                    break
                 sleep(2)
                 if b == 1:
                     '''网页的物料数量录入程序，如果没有可以录入的，就不执行'''
@@ -322,6 +333,9 @@ if __name__ == "__main__":
                 table_head(row)
                 sleep(2)  #非常重要，等网页读取数据完成，不然影响到后面数据选择
                 order_deal()
+                if confirm_ok == 0:
+                    confirm_ok = 1
+                    break
                 sleep(2)
                 if b == 1:
                     confirm()
