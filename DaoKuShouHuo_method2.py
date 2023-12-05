@@ -28,6 +28,9 @@ def code_chioce():
                     driver.find_element_by_xpath(
                         '/html/body/div[1]/section/section/section/main/div/div[1]/div[2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[1]/div/span/span' % y).click()
 
+def code_option():
+    pass
+
 
 if __name__ == "__main__":
     arr = []
