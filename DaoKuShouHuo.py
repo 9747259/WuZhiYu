@@ -1,6 +1,7 @@
 from time import sleep
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote import switch_to
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -22,7 +23,6 @@ def table_head(row):
     driver.find_element_by_xpath(
         '/html/body/div/section/section/section/main/div/div[1]/div[1]/div/div/div/div[2]/div/div/span').click()
     '''输入订单号'''
-    sleep(1)
     driver.find_element_by_xpath(
         '/html/body/div[1]/section/section/section/main/div/div[1]/div[1]/div/div/div/div[1]/div/div[6]/div/div['
         '2]/div/div/div/div/ul/li/div/span[1]/span/span[1]/input').send_keys(
@@ -36,7 +36,6 @@ def order_deal():
     global arr, arr2, temp_number, b
 
     temp_number = 0
-    sleep(1)
     length = len(driver.find_elements_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
                                       '2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr'))
     # 检查该订单是否有物料可以收料
@@ -106,7 +105,6 @@ def confirm():
     arr3 = []
     final_temp_number = 0
     flag_confirm = 0
-    orange_fill = PatternFill(fill_type='solid', fgColor="FFC125")
 
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
                                  '2]/div/div/div/div/div[1]/div/div[1]/div/button[1]').click()
@@ -125,28 +123,36 @@ def confirm():
                 if arr3 == []:
                     if mysheet.cell(final_sheet_row, 3).value == driver.find_element_by_xpath(
                             '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
-                            '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[3]/div/span'%final_system_row).text:
+                            '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[3]/div/span' % final_system_row).text:
                         if mysheet.cell(final_sheet_row, 7).value <= float(driver.find_element_by_xpath('/html/body'
                                                                                                         '/div['
-                                                                                                        '1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[9]/div/span' %final_system_row).text):
+                                                                                                        '1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[9]/div/span' % final_system_row).text):
                             path_action = driver.find_element_by_xpath(
                                 '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                 '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
                                 '10]/div/span/div/div/div[2]/input' % final_system_row)
 
-
                             if driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
-                                                         '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
-                                                         '2]/table/tbody/tr/td[13]/div/span').text == '上架':
+                                                            '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                            '2]/table/tbody/tr[%d]/td[13]/div/span'%final_system_row).text == '上架':
                                 driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                              '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
-                                                             '2]/table/tbody/tr/td[13]/div/span').click()
+                                                             '2]/table/tbody/tr[%d]/td[13]/div/span'%final_system_row).click()
                                 sleep(2)
-                                driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[2]/div/div['
-                                                             '3]/div[1]/div/div/div/div/div/div/div/div['
-                                                             '2]/table/tbody/tr[1]/td[1]/span/label/span/input').click()
-                                sleep(1)
-                                driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[3]/div/button[2]').click()
+                                if final_system_row == 1:
+                                    driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div/div[2]/div[2]/div/div['
+                                                                 '3]/div[1]/div/div/div/div/div/div/div/div['
+                                                                 '2]/table/tbody/tr[1]/td[1]/span/label/span/input').click()
+                                    driver.find_element_by_xpath(
+                                        '/html/body/div[4]/div/div[2]/div/div[2]/div[3]/div/button[2]').click()
+                                else:
+                                    driver.find_element_by_xpath(
+                                        '/html/body/div[5]/div/div[2]/div/div[2]/div[2]/div/div['
+                                        '3]/div[1]/div/div/div/div/div/div/div/div['
+                                        '2]/table/tbody/tr[1]/td[1]/span/label/span/input').click()
+                                    driver.find_element_by_xpath(
+                                        '/html/body/div[5]/div/div[2]/div/div[2]/div[3]/div/button[2]').click()
+
                                 sleep(2)
                                 driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                              '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
@@ -155,10 +161,19 @@ def confirm():
                                 flag_confirm = 1
                                 sleep(2)
                             '''点击下拉菜单，并选择库位'''
-                            driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr/td[14]/div/div/div/span').click()
+                            driver.find_element_by_xpath(
+                                '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
+                                '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
+                                '14]/div/div/div/span' % final_system_row).click()
                             sleep(2)
                             location_number = select_location(mysheet.cell(final_sheet_row, 1).value)
-                            driver.find_element_by_xpath('/html/body/div[4]/div/div/div/ul/li[%d]'%location_number).click()
+                            if flag_confirm == 0:
+                                driver.find_element_by_xpath(
+                                    '/html/body/div[%d]/div/div/div/ul/li[%d]' % (final_system_row+3,location_number)).click()
+                            else:
+                                driver.find_element_by_xpath(
+                                    '/html/body/div[%d]/div/div/div/ul/li[%d]' % (final_system_row+4,location_number)).click()
+                                flag_confirm = 0
                             '''输入数量'''
                             ActionChains(driver).double_click(path_action).send_keys(
                                 str(mysheet.cell(final_sheet_row, 7).value)).perform()
@@ -174,7 +189,6 @@ def confirm():
                         for y in arr3:
                             final_temp_number = mysheet.cell(y, 7).value + final_temp_number
                         flag_y = 1
-
                     if mysheet.cell(final_sheet_row, 3).value == driver.find_element_by_xpath(
                             '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                             '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[3]/div/span'
@@ -187,7 +201,6 @@ def confirm():
                                 '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                 '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
                                 '10]/div/span/div/div/div[2]/input' % final_system_row)
-
                             if driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
                                                          '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                          '2]/table/tbody/tr/td[13]/div/span').text == '上架':
@@ -205,15 +218,23 @@ def confirm():
                                                              '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                              '2]/table/tbody/tr[%d]/td['
                                                              '1]/div/span/span' % final_system_row).click()
+
                                 flag_confirm = 1
                                 sleep(2)
                             '''点击下拉菜单，并选择库位'''
                             driver.find_element_by_xpath(
-                                '/html/body/div[1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr/td[14]/div/div/div/span').click()
+                                '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
+                                '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
+                                '14]/div/div/div/span' % final_system_row).click()
                             sleep(2)
                             location_number = select_location(mysheet.cell(final_sheet_row, 1).value)
-                            driver.find_element_by_xpath(
-                                '/html/body/div[4]/div/div/div/ul/li[%d]' % location_number).click()
+                            if flag_confirm == 0:
+                                driver.find_element_by_xpath(
+                                    '/html/body/div[%d]/div/div/div/ul/li[%d]' % (final_system_row + 3, location_number)).click()
+                            else:
+                                driver.find_element_by_xpath(
+                                    '/html/body/div[%d]/div/div/div/ul/li[%d]' % (final_system_row + 4, location_number)).click()
+                                flag_confirm = 0
                             '''输入数量'''
                             ActionChains(driver).double_click(path_action).send_keys(str(final_temp_number)).perform()
                             driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
@@ -226,33 +247,28 @@ def confirm():
                             final_temp_number = 0
                             break
 
-
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
                                  '1]/div/div/div/div/div[1]/div/div[1]/div/button[1]') .click()
     sleep(2)
-
-    '''当有库存地录入时，确认弹出框的点击按钮不一致，要分别执行，flag_confirm为0时表示没有库存地录入，flag_confirm为1时表示有库存地录入'''
-    '''
-    if flag_confirm == 0:
-        driver.find_element_by_css_selector('body > div:nth-child(10) > div > '
-                                        'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
-                                        'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
-                                        'button.ant-btn.ant-btn-primary').click()
+    try:
+        driver.find_element_by_css_selector('body > div:nth-child(%d) > div > '
+                                            'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
+                                            'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
+                                            'button.ant-btn.ant-btn-primary'%(final_system_row+10)).click()
         sleep(2)
         driver.find_element_by_css_selector(
-            'body > div:nth-child(9) > div > div.ant-modal-wrap.ant-modal-centered > div '
-            '> div.ant-modal-content > div.ant-modal-footer > button:nth-child(1)').click()
-    '''
-    #if flag_confirm == 1:
-    driver.find_element_by_css_selector('body > div:nth-child(11) > div > '
-                                        'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
-                                        'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
-                                        'button.ant-btn.ant-btn-primary').click()
-    sleep(2)
-    driver.find_element_by_css_selector(
-        'body > div:nth-child(9) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
-        'div.ant-modal-footer > button:nth-child(1)').click()
-        #flag_confirm = 0
+            'body > div:nth-child(9) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
+            'div.ant-modal-footer > button:nth-child(1)').click()
+    except:
+        driver.find_element_by_css_selector('body > div:nth-child(12) > div > '
+                                            'div.ant-modal-wrap.ant-modal-centered.ant-modal-confirm-centered > div > '
+                                            'div.ant-modal-content > div > div > div.ant-modal-confirm-btns > '
+                                            'button.ant-btn.ant-btn-primary').click()
+        sleep(2)
+        driver.find_element_by_css_selector(
+            'body > div:nth-child(10) > div > div.ant-modal-wrap.ant-modal-centered > div > div.ant-modal-content > '
+            'div.ant-modal-footer > button:nth-child(1)').click()
+        flag_confirm = 0
     '''保存EXCEL表的数据'''
     mybook.save(r'D:\工作相关\到库收货.xlsx')
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
@@ -286,9 +302,12 @@ def cancel_button():
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
                                  '1]/div/div/div/div[1]/div/div[6]/div/div[2]/div/div/div/div/ul/li/div/span['
                                  '1]/span/span[1]/span').click()
-    sleep(2)
+    sleep(1)
     driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[1]/div['
                                  '1]/div/div/div/div[2]/div/div/span/i').click()
+
+def confirm_button(final_sheet_row, final_system_row):
+    pass
 
 
 if __name__ == "__main__":
