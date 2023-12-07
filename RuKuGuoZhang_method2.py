@@ -33,6 +33,8 @@ def code_chioce(length):
                         '/html/body/div[1]/section/section/section/main/div/div/div/div[3]/div[1]/div[2]/div[1]/div['
                         '2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[1]/div/span/span' %
                         y).click()
+                    mysheet.cell(x, 9).value = '已过账'
+                    mybook.save(r'D:\工作相关\入库过账.xlsx')
 
 
     #driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div/div/div[3]/div[1]/div['
