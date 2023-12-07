@@ -66,7 +66,7 @@ def code_execute():
                                                      '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
                                                      '2]/table/tbody/tr[%d]/td['
                                                      '1]/div/span/span' % y).click()
-                        mysheet.cell(x, 9).value = '已选中'
+                        mysheet.cell(x, 9).value = '物资域已收到货'
     mybook.save(r'D:\工作相关\到库收货.xlsx')
 
 def select_location(temp_location):
