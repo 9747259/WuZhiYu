@@ -61,8 +61,9 @@ if __name__ == "__main__":
     mybook = openpyxl.load_workbook(r'D:\工作相关\入库过账.xlsx')
     mysheet = mybook.active
     max_row = mysheet.max_row
-    print(length)
+
     code_chioce(length)
+    print("已完成")
 
 
 

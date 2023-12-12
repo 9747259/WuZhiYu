@@ -103,8 +103,8 @@ if __name__ == "__main__":
     mysheet = mybook.active
     max_row = mysheet.max_row
 
-    #code_chioce()
-    #sleep(5)
+    code_chioce()
+    sleep(5)
     code_execute()
     print("已完成")
 
