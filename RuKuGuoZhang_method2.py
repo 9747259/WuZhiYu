@@ -26,9 +26,14 @@ def code_chioce(length):
             '2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[3]/div/span' % y).text
         total_number = driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div/div/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[6]/div/span'%y).text
         for x in range(2, max_row + 1):
+            '''
+            if driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div/div/div[3]/div['
+                                            '1]/div[2]/div[1]/div[2]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                            '2]/table/tbody/tr[%d]/td[8]/div/span'%y).text == '':
+            '''
             if str(mysheet.cell(x, 2).value) == order_number:
                 if str(mysheet.cell(x, 3).value) == code_number:
-                    #if str(mysheet.cell(x, 7).value) == str(total_number):
+                    #if str(mysheet.cell(x, 7).value) == float(total_number):
                     driver.find_element_by_xpath(
                         '/html/body/div[1]/section/section/section/main/div/div/div/div[3]/div[1]/div[2]/div[1]/div['
                         '2]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[1]/div/span/span' %
