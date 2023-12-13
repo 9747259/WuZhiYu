@@ -41,32 +41,33 @@ def code_execute():
         final_number = driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div[2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td[9]/div/span' % y).text
 
         for x in range(2, max_row+1):
-            if str(mysheet.cell(x, 2).value) == final_order:
-                if str(mysheet.cell(x, 3).value) == final_code:
-                    if mysheet.cell(x, 7).value == float(final_number):
-                        '''
-                        path_action = driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
-                                                     '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
-                                                     '2]/table/tbody/tr[%d]/td[14]/div/div/div/div'%y)
-                        action = ActionChains(driver).click(path_action).send_keys(str(mysheet.cell(x, 1).value)).pause(3).move_by_offset(2,4).click().perform()
-                        '''
+            if mysheet.cell(x, 9).value != '物资域已收到货':
+                if str(mysheet.cell(x, 2).value) == final_order:
+                    if str(mysheet.cell(x, 3).value) == final_code:
+                        if mysheet.cell(x, 7).value == float(final_number):
+                            '''
+                            path_action = driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                         '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                         '2]/table/tbody/tr[%d]/td[14]/div/div/div/div'%y)
+                            action = ActionChains(driver).click(path_action).send_keys(str(mysheet.cell(x, 1).value)).pause(3).move_by_offset(2,4).click().perform()
+                            '''
 
-                        '''
-                        #点击下拉菜单，并选择库位
-                        driver.find_element_by_xpath(
-                            '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
-                            '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
-                            '14]/div/div/div/span' % y).click()
-                        sleep(2)
-                        
-                        location_number = select_location(mysheet.cell(x, 1).value)
-                        driver.find_element_by_xpath('/html/body/div[last()]/div/div/div/ul/li[%d]' % location_number).click()
-                        '''
-                        driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
-                                                     '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
-                                                     '2]/table/tbody/tr[%d]/td['
-                                                     '1]/div/span/span' % y).click()
-                        mysheet.cell(x, 9).value = '物资域已收到货'
+                            '''
+                            #点击下拉菜单，并选择库位
+                            driver.find_element_by_xpath(
+                                '/html/body/div[1]/section/section/section/main/div/div[2]/div/div['
+                                '1]/div/div/div/div/div[3]/div[2]/div[1]/div[2]/table/tbody/tr[%d]/td['
+                                '14]/div/div/div/span' % y).click()
+                            sleep(2)
+                            
+                            location_number = select_location(mysheet.cell(x, 1).value)
+                            driver.find_element_by_xpath('/html/body/div[last()]/div/div/div/ul/li[%d]' % location_number).click()
+                            '''
+                            driver.find_element_by_xpath('/html/body/div[1]/section/section/section/main/div/div['
+                                                         '2]/div/div[1]/div/div/div/div/div[3]/div[2]/div[1]/div['
+                                                         '2]/table/tbody/tr[%d]/td['
+                                                         '1]/div/span/span' % y).click()
+                            mysheet.cell(x, 9).value = '物资域已收到货'
     mybook.save(r'D:\工作相关\到库收货.xlsx')
 
 def select_location(temp_location):
